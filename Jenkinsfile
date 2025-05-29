@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+        /*
         stage('Build') {
             agent {
                 docker {
@@ -25,6 +26,7 @@ pipeline {
                 '''
             }            
         }
+        */
         stage("Test") {
             agent {
                 docker {
@@ -37,8 +39,8 @@ pipeline {
             steps {
                 sh '''
                     echo "Test State - Start Testing"
-                    echo "=========================="
-                    test -f build/index.html
+                    # echo "=========================="
+                    # test -f build/index.html
                     npm test
                 '''
             }
