@@ -15,6 +15,7 @@ pipeline {
                 sh '''
                     echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
+                    node --version
                 '''
             }
         }
