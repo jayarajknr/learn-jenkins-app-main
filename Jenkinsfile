@@ -15,7 +15,15 @@ pipeline {
                 sh '''
                     echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
+                    ls -la
                     node --version
+                    npm --version
+                    echo 'Installing dependencies...'
+                    npm ci
+                    npm run build
+                    ls -la 
+                    
+
                 '''
             }
         }
