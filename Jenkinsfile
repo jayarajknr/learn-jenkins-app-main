@@ -30,6 +30,7 @@ pipeline {
                 sh '''
                     echo "Test State - Start Testing"
                     echo "=========================="
+                    test build/index.html
                 '''
             }
         }
