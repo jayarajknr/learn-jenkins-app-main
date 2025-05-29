@@ -21,11 +21,18 @@ pipeline {
                     echo 'Installing dependencies...'
                     npm ci
                     npm run build
-                    ls -la 
-                    
-
+                    ls -la                     
+                '''
+            }            
+        }
+        stage("Test") {
+            steps {
+                sh '''
+                    echo "Test State - Start Testing"
+                    echo "=========================="
                 '''
             }
         }
+
     }
 }
