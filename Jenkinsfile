@@ -52,7 +52,7 @@ pipeline {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.39.0-noble'                    
                     reuseNode true
-                    args '-v /root/.m2:/root/.m2'
+                    //args '-v /root/.m2:/root/.m2'
                 }
             }
 
@@ -68,10 +68,11 @@ pipeline {
         }
 
     }
-
+/*
     post {
         always {
             junit 'test-results/junit.xml'
         }
     }
+    */
 }
