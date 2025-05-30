@@ -30,48 +30,49 @@ pipeline {
             }            
         }
         
-        
-        stage("Test") {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                    args '-v /root/.m2:/root/.m2'
+        stage("Tests") {
+            parallel {
+                stage("Unit Test") {
+                    agent {
+                        docker {
+                            image 'node:18-alpine'
+                            reuseNode true
+                            args '-v /root/.m2:/root/.m2'
+                        }
+                    }
+
+                    steps {
+                        sh '''
+                            echo "Test State - Start Testing"
+                            # echo "=========================="
+                            # test -f build/index.html
+                            npm test
+                        '''
+                    }
+                }
+                
+                stage("E2E Test") {
+                    agent {
+                        docker {
+                            //image 'mcr.microsoft.com/playwright:v1.39.0-noble'
+                            image 'mcr.microsoft.com/playwright:v1.39.0-focal'
+                            reuseNode true
+                            //args '-v /root/.m2:/root/.m2'
+                        }
+                    }
+
+                    steps {
+                        sh '''
+                            echo "E2E Test Starting"
+                            npm install serve
+                            node_modules/.bin/serve -s build &
+                            sleep 10
+                            npx playwright test --reporter=html
+                        '''
+                    }
                 }
             }
-
-            steps {
-                sh '''
-                    echo "Test State - Start Testing"
-                    # echo "=========================="
-                    # test -f build/index.html
-                    npm test
-                '''
-            }
         }
-        
-
-        stage("E2E Test") {
-            agent {
-                docker {
-                    //image 'mcr.microsoft.com/playwright:v1.39.0-noble'
-                    image 'mcr.microsoft.com/playwright:v1.39.0-focal'
-                    reuseNode true
-                    //args '-v /root/.m2:/root/.m2'
-                }
-            }
-
-            steps {
-                sh '''
-                    echo "E2E Test Starting"
-                    npm install serve
-                    node_modules/.bin/serve -s build &
-                    sleep 10
-                    npx playwright test --reporter=html
-                '''
-            }
-        }
-
     }
 
     post {
