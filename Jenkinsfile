@@ -13,7 +13,10 @@ pipeline {
                 }
             }
             steps {
+                cleanWs()
+                
                 sh '''
+                    cleanWs()
                     echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
                     ls -la
@@ -27,7 +30,7 @@ pipeline {
             }            
         }
         
-        /*
+        
         stage("Test") {
             agent {
                 docker {
@@ -46,7 +49,7 @@ pipeline {
                 '''
             }
         }
-        */
+        
 
         stage("E2E Test") {
             agent {
