@@ -13,8 +13,8 @@ pipeline {
                 }
             }
             steps {
-                cleanWs()
-                
+                //cleanWs()
+
                 sh '''
                     cleanWs()
                     echo 'Hello Jenkins!!!'
