@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         NETLIFY_SITE_ID = 'ad3e0d66-e12c-4a56-89f1-ab3007291ec6'
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token')
     }
 
     stages {
@@ -91,17 +92,18 @@ pipeline {
                 sh '''
                    npm install netlify-cli 
                    node_modules/.bin/netlify --version 
-                   echo "Deploying to PRODUCTION. Site ID : $NETLIFY_SITE_ID"           
+                   echo "Deploying to PRODUCTION. Site ID : $NETLIFY_SITE_ID"   
+                   node_modules/.bin/netlify status         
                 '''
             }            
         }
     }
 
-    post {
+    /*post {
         always {
             junit 'jest-results/junit.xml'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
         }
     }
-    
+    */
 }
