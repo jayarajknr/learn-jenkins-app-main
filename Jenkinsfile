@@ -34,7 +34,7 @@ pipeline {
                 '''
             }            
         }
-       /* 
+       
         stage("Tests") {
             parallel {
                 stage("Unit Test") {
@@ -56,7 +56,7 @@ pipeline {
                     }
                 }
                 
-                stage("E2E Test") {
+                stage("E2E Test - Local") {
                     agent {
                         docker {
                             //image 'mcr.microsoft.com/playwright:v1.39.0-noble'
@@ -68,19 +68,23 @@ pipeline {
 
                     steps {
                         sh '''
-                            echo "E2E Test Starting"
+                            echo "E2E - LOCAL - Test Starting"
                             npm install serve
                             node_modules/.bin/serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
                         '''
                     }
+
+                    post {
+                        always {
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report - PRODUCTION', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
+                        }
+                    }
                 }
             }
         }
-        */
-
-        
+               
         stage('Deploy') {
             agent {
                 docker {
@@ -100,6 +104,32 @@ pipeline {
                    node_modules/.bin/netlify deploy --dir=build --prod
                 '''
             }            
+        }
+
+        stage("E2E Test - PROD") {
+            environment {
+                CI_ENVIRONMENT_URL = ""
+            }
+
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-focal'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    echo "E2E - PRODUCTION Test Starting"
+                    #npx playwright test --reporter=html
+                '''
+            }
+
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report - PRODUCTION', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
+                }
+            }
         }
     }
 
