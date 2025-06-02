@@ -21,7 +21,7 @@ pipeline {
                 //cleanWs()
 
                 sh '''
-                    cleanWs()
+                    #cleanWs()
                     echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
                     ls -la
@@ -94,7 +94,7 @@ pipeline {
                    node_modules/.bin/netlify --version 
                    echo "Deploying to PRODUCTION. Site ID : $NETLIFY_SITE_ID"   
                    node_modules/.bin/netlify status
-                  # node_modules/.bin/netlify deploy --dir=build --prod
+                   node_modules/.bin/netlify deploy --dir=build --prod
                 '''
             }            
         }
