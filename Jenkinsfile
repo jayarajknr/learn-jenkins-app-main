@@ -85,7 +85,7 @@ pipeline {
             }
         }
                
-        stage('Deploy') {
+        stage('Staging - Deployment') {
             agent {
                 docker {
                     //image 'node:18-alpine'
@@ -95,7 +95,34 @@ pipeline {
                 }
             }
             steps {
-                echo "Deployment Started...!!!"
+                echo "Staging Deployment Started...!!!"
+                sh '''
+                   npm install netlify-cli 
+                   node_modules/.bin/netlify --version 
+                   echo "Deploying to Staging. Site ID : $NETLIFY_SITE_ID"   
+                   node_modules/.bin/netlify status
+                   node_modules/.bin/netlify deploy --dir=build 
+                '''
+            }            
+        }
+
+        stage('Approval') {
+            steps {
+                input message: 'Approval Needed for PROD deployment. Do you want to Deploy?', ok: 'I Approve PROD Deployment'
+            }
+        }
+
+        stage('Production - Deployment') {
+            agent {
+                docker {
+                    //image 'node:18-alpine'
+                    image 'node:18'
+                    reuseNode true
+                    //args '-v /root/.m2:/root/.m2'
+                }
+            }
+            steps {
+                echo "Production Deployment Started...!!!"
                 sh '''
                    npm install netlify-cli 
                    node_modules/.bin/netlify --version 
