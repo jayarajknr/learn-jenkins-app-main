@@ -21,7 +21,7 @@ pipeline {
                 //cleanWs()
 
                 sh '''
-                    #cleanWs()
+                    cleanWs()
                     echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
                     ls -la
@@ -34,7 +34,7 @@ pipeline {
                 '''
             }            
         }
-        
+       /* 
         stage("Tests") {
             parallel {
                 stage("Unit Test") {
@@ -78,7 +78,9 @@ pipeline {
                 }
             }
         }
+        */
 
+        /*
         stage('Deploy') {
             agent {
                 docker {
@@ -98,6 +100,7 @@ pipeline {
                 '''
             }            
         }
+        */
     }
 
     /*post {
