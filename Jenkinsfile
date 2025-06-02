@@ -14,15 +14,12 @@ pipeline {
                     image 'node:18-alpine'
                     reuseNode true
                     args '-v /root/.m2:/root/.m2'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
-                //cleanWs()
 
                 sh '''
                     cleanWs()
-                    echo 'Hello Jenkins!!!'
                     echo 'Building the project...'
                     ls -la
                     node --version
@@ -103,11 +100,40 @@ pipeline {
                    echo "Deploying to Staging. Site ID : $NETLIFY_SITE_ID"   
                    node_modules/.bin/netlify status
                    node_modules/.bin/netlify deploy --dir=build --json > staging_deploy_output.json
-                   node_modules/.bin/node-jq -r '.deploy_url' staging_deploy_output.json
+                   #node_modules/.bin/node-jq -r '.deploy_url' staging_deploy_output.json
                 '''
-            }            
+                script {
+                    env.STAGING_URL = sh(script:"node_modules/.bin/node-jq -r '.deploy_url' staging_deploy_output.json", returnStdout:true)
+                }
+            }                        
         }
 
+        stage("E2E Test - Staging") {
+            environment {
+                CI_ENVIRONMENT_URL = "${env.STAGING_URL}"
+            }
+
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-focal'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    echo "E2E - Staging Test Starting"
+                    #npx playwright test --reporter=html
+                '''
+            }
+
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report - Staging', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
+                }
+            }
+        }
+/*
         stage('Approval') {
             steps {
                 timeout(5) {
@@ -115,7 +141,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Production - Deployment') {
             agent {
                 docker {
