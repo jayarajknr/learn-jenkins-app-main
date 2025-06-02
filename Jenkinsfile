@@ -108,7 +108,9 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input message: 'Approval Needed for PROD deployment. Do you want to Deploy?', ok: 'I Approve PROD Deployment'
+                timeout(5) {
+                    input message: 'Approval Needed for PROD deployment. Do you want to Deploy?', ok: 'I Approve PROD Deployment'
+                }
             }
         }
 
