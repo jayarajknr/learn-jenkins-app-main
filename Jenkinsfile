@@ -78,7 +78,7 @@ pipeline {
 
                     post {
                         always {
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report - PRODUCTION', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report - LOCAL', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
                         }
                     }
                 }
@@ -108,7 +108,7 @@ pipeline {
 
         stage("E2E Test - PROD") {
             environment {
-                CI_ENVIRONMENT_URL = ""
+                CI_ENVIRONMENT_URL = "https://hilarious-croquembouche-b394da.netlify.app"
             }
 
             agent {
