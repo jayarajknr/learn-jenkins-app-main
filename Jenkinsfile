@@ -14,6 +14,7 @@ pipeline {
 
         stage('Create Docker Container ') {
             steps {
+                sh 'echo Creating DOCKER container'
                 sh 'docker build --no-cache -t my-playwright .'
 
             }
