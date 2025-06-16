@@ -1,15 +1,7 @@
 pipeline {
     agent any
 
-    stage('Deploy to Production') {
-        when {
-            expression { input message: "Proceed to full production rollout?" }
-        }
-        steps {
-            sh "./deploy.sh --env=production --version=${env.VERSION}"
-        }
-    }
-
+    
 
     parameters {
         string(name: 'ROLLBACK_VERSION', defaultValue: '', description: 'Git tag or commit to roll back to')
@@ -21,6 +13,16 @@ pipeline {
     }
 
     stages {
+
+        stage('Deploy to Production') {
+            when {
+                expression { input message: "Proceed to full production rollout?" }
+            }
+            steps {
+                sh "./deploy.sh --env=production --version=${env.VERSION}"
+            }
+        }
+
 
         stage('Create Docker Container ') {
             steps {
