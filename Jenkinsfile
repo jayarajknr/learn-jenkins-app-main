@@ -10,7 +10,7 @@ pipeline {
 
         stage('Docker') {
             steps {
-                npm cache clean --force
+                sh 'npm cache clean --force'
                 sh 'docker build -t my-playwright .'
             }
         }
