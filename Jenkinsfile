@@ -12,7 +12,7 @@ pipeline {
 
     stages {
 
-        stage('Docker') {
+        stage('Create Docker Container ') {
             steps {
                 sh 'docker build --no-cache -t my-playwright .'
 
