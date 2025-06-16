@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'ROLLBACK_VERSION', defaultValue: '', description: 'Git tag or commit to roll back to')
+    }
+
     environment {
         NETLIFY_SITE_ID = 'ad3e0d66-e12c-4a56-89f1-ab3007291ec6'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
