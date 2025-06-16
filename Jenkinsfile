@@ -14,6 +14,7 @@ pipeline {
             }
         }
         
+/*        
         stage('Build') {
             agent {
                 docker {
@@ -186,6 +187,7 @@ pipeline {
                 }
             }
         }
+*/        
     }
 
     /*post {
