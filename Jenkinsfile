@@ -10,8 +10,8 @@ pipeline {
 
         stage('Docker') {
             steps {
-                sh 'npm cache clean --force'
-                sh 'docker build -t my-playwright .'
+                sh 'docker build --no-cache -t my-playwright .'
+
             }
         }
         
@@ -193,11 +193,14 @@ pipeline {
   */     
     }
 
-    /*post {
+    post {
         always {
+            echo "DONE !!!!!!!!!!!!!!!!!!!!!!!!"
+            /*
             junit 'jest-results/junit.xml'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report', reportTitles: 'E2E Test Result', useWrapperFileDirectly: true])
+            */
         }
     }
-    */
+    
 }
