@@ -143,13 +143,15 @@ pipeline {
             }
         }
 */
+
+/*
         stage('Production - Deployment') {
             agent {
                 docker {
                     image 'node:18'
                     reuseNode true
                 }
-            }
+            } 
             steps {
                 echo "Production Deployment Started...!!!"
                 sh '''
@@ -187,7 +189,7 @@ pipeline {
                 }
             }
         }
-*/        
+  */     
     }
 
     /*post {
